@@ -17,10 +17,10 @@ public class StudentController {
         this.studentRepository = studentRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/students")
     public String listStudents(Model model) {
         List<Student> students = (List<Student>) studentRepository.findAll();
         model.addAttribute("students", students);
-        return "students"; //
+        return "students";
     }
 }

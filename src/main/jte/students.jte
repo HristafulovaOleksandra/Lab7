@@ -9,13 +9,17 @@
 </head>
 <body>
 <h1>Список студентів</h1>
-<ul>
-    @for (Student student : students){
-        <tr>
-            <td>@student.getName()</td>
-            <td>@student.getId()</td>
-        </tr>}
+<table border="1">
+    <tr>
+        <th>Ім'я</th>
+        <th>ID</th>
+    </tr>
+    @for (Student student : students)
+    <tr>
+        <td>@student.getName()</td>
+        <td>@student.getId()</td>
+    </tr>
     @endfor
-    }</ul>
+</table>
 </body>
 </html>
