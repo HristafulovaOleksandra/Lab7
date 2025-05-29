@@ -16,8 +16,8 @@
     </tr>
     @for (Student student : students)
     <tr>
-        <td>@student.getName()</td>
-        <td>@student.getId()</td>
+        <td>${student.getId()}</td>
+        <td>${student.getName()}</td>
     </tr>
     @endfor
 </table>
