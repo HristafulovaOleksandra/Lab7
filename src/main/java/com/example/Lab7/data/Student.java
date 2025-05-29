@@ -19,7 +19,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // SERIAL
     private Long id;
     private String name;
-    private Integer age;
+    private String email;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude  // щоб уникнути циклічних посилань в toString
