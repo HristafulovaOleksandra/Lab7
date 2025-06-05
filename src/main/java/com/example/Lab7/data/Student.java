@@ -16,11 +16,11 @@ import java.util.List;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // SERIAL
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude  // щоб уникнути циклічних посилань в toString
+    @ToString.Exclude
     private List<Grade> grades;
 }

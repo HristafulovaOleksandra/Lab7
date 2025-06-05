@@ -11,8 +11,8 @@
 <h1>Список студентів</h1>
 <table border="1">
     <tr>
-        <th>Ім'я</th>
         <th>ID</th>
+        <th>Ім'я</th>
     </tr>
     @for (Student student : students)
     <tr>
