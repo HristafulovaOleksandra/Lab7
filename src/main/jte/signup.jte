@@ -1,5 +1,5 @@
 @param String error
-
+@param String registrationSuccess
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +21,7 @@
     </style>
 </head>
 <body>
+
 <div class="registration-container">
     <h2>Реєстрація нового користувача</h2>
 
