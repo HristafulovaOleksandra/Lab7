@@ -1,6 +1,7 @@
 @param String error
 @param String logout
 @param String registrationSuccess
+@param org.springframework.security.web.csrf.CsrfToken _csrf
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@
         .message-container { margin-bottom: 15px; padding: 10px; border-radius: 5px; font-weight: bold; }
         .error-message { background-color: #ffebee; color: red; }
         .logout-message { background-color: #e8f5e9; color: green; }
-        .success-message { background-color: #e6ffed; color: #28a745; } /* Новий стиль для успішного повідомлення */
+        .success-message { background-color: #e6ffed; color: #28a745; }
         label { display: block; text-align: left; margin-bottom: 5px; color: #555; }
         input[type="text"], input[type="password"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
         button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
@@ -39,6 +40,8 @@
     @endif
 
     <form action="/login" method="post">
+        <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+
         <div>
             <label for="username">Ім'я користувача:</label>
             <input type="text" id="username" name="username" autofocus="autofocus">
