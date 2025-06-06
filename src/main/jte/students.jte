@@ -1,5 +1,6 @@
 @import com.example.Lab7.data.Student
 @param java.util.List<Student> students
+@param String successMessage
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +29,33 @@
         .logout-button:hover {
             background-color: #c82333;
         }
+        .add-grade-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .add-grade-button:hover {
+            background-color: #218838;
+        }
+        .success-message {
+            background-color: #e6ffed;
+            color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .grades-section { margin-top: 30px; }
+        .grades-section h3 { margin-bottom: 10px; }
+        .grade-item { margin-bottom: 5px; font-size: 0.9em; color: #555; }
     </style>
 </head>
 <body>
@@ -39,6 +67,12 @@
     </div>
     <h1>Список Студентів</h1>
 
+    @if(successMessage != null)
+        <div class="success-message">${successMessage}</div>
+    @endif
+
+    <a href="/grades/add" class="add-grade-button">Додати оцінку</a>
+
     @if(students.isEmpty())
         <p>Немає зареєстрованих студентів.</p>
     @else
@@ -48,7 +82,7 @@
                 <th>ID</th>
                 <th>Ім'я</th>
                 <th>Імейл</th>
-            </tr>
+                <th>Оцінки</th> </tr>
             </thead>
             <tbody>
             @for(Student student : students)
@@ -56,6 +90,17 @@
                     <td>${student.getId()}</td>
                     <td>${student.getName()}</td>
                     <td>${student.getEmail()}</td>
+                    <td>
+                        @if(student.getGrades() != null && !student.getGrades().isEmpty())
+                            <ul>
+                                @for(com.example.Lab7.data.Grade grade : student.getGrades())
+                                    <li>${grade.getSubject()}: ${grade.getScore()}</li>
+                                @endfor
+                            </ul>
+                        @else
+                            <p>Немає оцінок</p>
+                        @endif
+                    </td>
                 </tr>
             @endfor
             </tbody>
