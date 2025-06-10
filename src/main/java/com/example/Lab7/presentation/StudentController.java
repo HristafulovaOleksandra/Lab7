@@ -12,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +36,20 @@ public class StudentController {
     public String listStudents(
             @RequestParam(value = "successMessage", required = false) String successMessage,
             @RequestParam(value = "errorMessage", required = false) String errorMessage,
+            @RequestParam(value = "sortBy", required = false) String sortBy,
             Model model,
             CsrfToken csrfToken) {
-        List<Student> students = studentRepository.findAll();
+
+        List<Student> students;
+
+        if ("asc".equalsIgnoreCase(sortBy)) {
+            students = studentRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        } else if ("desc".equalsIgnoreCase(sortBy)) {
+            students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
+        } else {
+            students = studentRepository.findAll();
+        }
+
         model.addAttribute("students", students);
         if (successMessage != null) {
             model.addAttribute("successMessage", successMessage);
@@ -75,15 +89,22 @@ public class StudentController {
 
     @PostMapping("/students")
     @PreAuthorize("hasRole('ADMIN')")
-    public String saveStudent(@ModelAttribute Student student) {
+    public String saveStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
         studentRepository.save(student);
-        return "redirect:/students?successMessage=StudentSaved";
+        redirectAttributes.addFlashAttribute("successMessage", "StudentSaved");
+        return "redirect:/students";
     }
 
-    @GetMapping("/students/{id}/delete")
+    @PostMapping("/students/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
-    public String deleteStudent(@PathVariable Long id) {
-        studentRepository.deleteById(id);
-        return "redirect:/students?successMessage=StudentDeleted";
+    public String deleteStudent(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if (studentOptional.isPresent()) {
+            studentRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "StudentDeleted");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "StudentNotFound");
+        }
+        return "redirect:/students";
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
-
+//аутентифікація користувачів
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

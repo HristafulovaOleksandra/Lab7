@@ -3,6 +3,7 @@ package com.example.Lab7.config;
 import com.example.Lab7.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -44,11 +46,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/login", "/logout", "/register").permitAll()
+                        .requestMatchers("/login", "/logout", "/register", "/api/register").permitAll()
                         .requestMatchers("/students").authenticated()
-                        .requestMatchers("/students/create", "/students/{id}/edit").hasRole("ADMIN")
-                        .requestMatchers("/students/{id}/delete").hasRole("ADMIN")
-                        .requestMatchers("/grades/add", "/grades").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/students/create", "/students/{id}/edit").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/students").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/students/{id}/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/grades/add").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/grades/add").hasRole("ADMIN")
+                        .requestMatchers("/grades").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -62,7 +67,8 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf
-                                .csrfTokenRequestHandler(requestHandler)
+                        .csrfTokenRequestHandler(requestHandler)
+                        .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
                 );
         return http.build();
     }

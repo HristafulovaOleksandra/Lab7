@@ -39,7 +39,6 @@ public class RegistrationRestController {
             return "signup";
         }
 
-
         User newUser = new User();
         newUser.setUsername(registrationRequest.getUsername());
         newUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));

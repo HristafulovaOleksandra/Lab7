@@ -94,6 +94,24 @@
         .grades-section { margin-top: 30px; }
         .grades-section h3 { margin-bottom: 10px; }
         .grade-item { margin-bottom: 5px; font-size: 0.9em; color: #555; }
+        .sort-buttons {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .sort-buttons a {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .sort-buttons a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +136,10 @@
         <a href="/grades/add" class="add-button">Додати оцінку</a>
     @endif
 
+    <div class="sort-buttons">
+        <a href="/students?sortBy=asc">Сортувати за ім'ям (А-Я)</a>
+        <a href="/students?sortBy=desc">Сортувати за ім'ям (Я-А)</a>
+    </div>
 
     @if(students.isEmpty())
         <p>Немає зареєстрованих студентів.</p>
@@ -154,7 +176,14 @@
                     @if(isAdmin)
                         <td>
                             <a href="/students/${student.getId()}/edit" class="edit-button">Редагувати</a>
-                            <a href="/students/${student.getId()}/delete" class="delete-button" onclick="return confirm('Ви впевнені, що хочете видалити цього студента?');">Видалити</a>
+                            <form action="/students/${student.getId()}/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="${_csrf.getParameterName()}" value="${_csrf.getToken()}"/>
+                                <input type="hidden" name="_method" value="DELETE"/>
+                                <button type="submit" class="delete-button"
+                                        onclick="return confirm('Ви впевнені, що хочете видалити цього студента?');">
+                                    Видалити
+                                </button>
+                            </form>
                         </td>
                     @endif
                 </tr>
