@@ -37,12 +37,15 @@ public class StudentController {
             @RequestParam(value = "successMessage", required = false) String successMessage,
             @RequestParam(value = "errorMessage", required = false) String errorMessage,
             @RequestParam(value = "sortBy", required = false) String sortBy,
+            @RequestParam(value = "searchQuery", required = false) String searchQuery,
             Model model,
             CsrfToken csrfToken) {
 
         List<Student> students;
 
-        if ("asc".equalsIgnoreCase(sortBy)) {
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            students = studentRepository.findByNameContainingIgnoreCase(searchQuery.trim());
+        } else if ("asc".equalsIgnoreCase(sortBy)) {
             students = studentRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
         } else if ("desc".equalsIgnoreCase(sortBy)) {
             students = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
@@ -57,6 +60,7 @@ public class StudentController {
         if (errorMessage != null) {
             model.addAttribute("errorMessage", errorMessage);
         }
+        model.addAttribute("searchQuery", searchQuery);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = authentication != null && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));

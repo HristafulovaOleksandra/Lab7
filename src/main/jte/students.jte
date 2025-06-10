@@ -9,6 +9,7 @@
 @param String errorMessage
 @param boolean isAdmin
 @param org.springframework.security.web.csrf.CsrfToken _csrf
+@param String searchQuery
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +38,20 @@
         .logout-button:hover {
             background-color: #c82333;
         }
+        .action-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .action-buttons .left-side-buttons,
+        .action-buttons .right-side-search {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
         .add-button {
             background-color: #28a745;
             color: white;
@@ -46,9 +61,7 @@
             cursor: pointer;
             font-size: 16px;
             text-decoration: none;
-            margin-top: 10px;
             display: inline-block;
-            margin-bottom: 20px;
         }
         .add-button:hover {
             background-color: #218838;
@@ -112,6 +125,28 @@
         .sort-buttons a:hover {
             background-color: #0056b3;
         }
+        .search-form {
+            display: flex;
+            gap: 5px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+        }
+        .search-form button {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .search-form button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -131,10 +166,21 @@
         <div class="error-message">${errorMessage}</div>
     @endif
 
-    @if(isAdmin)
-        <a href="/students/create" class="add-button">Додати нового студента</a>
-        <a href="/grades/add" class="add-button">Додати оцінку</a>
-    @endif
+    <div class="action-buttons">
+        <div class="left-side-buttons">
+            @if(isAdmin)
+                <a href="/students/create" class="add-button">Додати нового студента</a>
+                <a href="/grades/add" class="add-button">Додати оцінку</a>
+            @endif
+        </div>
+        <div class="right-side-search">
+            <form action="/students" method="get" class="search-form">
+                <input type="text" name="searchQuery" placeholder="Пошук за ім'ям..." value="${searchQuery != null ? searchQuery : ""}">
+                <button type="submit">Знайти</button>
+                <a href="/students" class="add-button" style="background-color: #f0ad4e;">Скинути</a>
+            </form>
+        </div>
+    </div>
 
     <div class="sort-buttons">
         <a href="/students?sortBy=asc">Сортувати за ім'ям (А-Я)</a>

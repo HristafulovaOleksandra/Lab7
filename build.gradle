@@ -40,6 +40,8 @@ dependencies {
 }
 
 jte {
+	sourceDirectory = file("src/main/jte").toPath()
+	targetDirectory = file(layout.buildDirectory.dir("generated-sources/jte").get().asFile.absolutePath).toPath()
 	generate()
 	binaryStaticContent = true
 }
